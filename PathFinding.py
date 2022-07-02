@@ -90,9 +90,6 @@ class Spot:
         if self.col > 0 and not grid[self.row][self.col - 1].is_barrier(): # LEFT
             self.neighbors.append(grid[self.row][self.col - 1])
 
-    def __lt__(self,other):
-        return False
-
 
 def make_grid(rows,width):
     grid=[]
@@ -184,9 +181,13 @@ def main(win, width):
 						for spot in row:
 							spot.update_neighbors(grid)
 
-					algorithm(lambda: draw(win, grid, ROWS, width), grid, start, end)
+					A_Star(lambda: draw(win, grid, ROWS, width), grid, start, end)
+					# GreedyBestFirstSearch(lambda: draw(win, grid, ROWS, width), grid, start, end)
+					# BFS(lambda: draw(win, grid, ROWS, width), grid, start, end)
+					# UCS(lambda: draw(win, grid, ROWS, width), grid, start, end)
+					# DFS(lambda: draw(win, grid, ROWS, width), grid, start, end)
 
-				if event.key == pygame.K_c:
+				if event.key == pygame.K_DELETE:
 					start = None
 					end = None
 					grid = make_grid(ROWS, width)
