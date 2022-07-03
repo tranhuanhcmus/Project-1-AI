@@ -2,7 +2,7 @@ from matplotlib.pyplot import close, title
 import pygame
 from tkinter import *
 
-WIDTH=600
+SIZE=(1280,800)
 pygame.init()
 # COLOR
 RED=(255,0,0)
@@ -17,7 +17,7 @@ GREY=(128,128,128)
 TURQUOISE=(64,224,208)
 
 BG=pygame.image.load('Image/cold.jpg')
-BG=pygame.transform.scale(BG,(1280,600))
+BG=pygame.transform.scale(BG,SIZE)
 
 
 
