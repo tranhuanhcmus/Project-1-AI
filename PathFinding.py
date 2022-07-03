@@ -4,7 +4,9 @@ import numpy as np
 import math
 from algorithm import *
 from make_obstacle import *
+from UI import *
 
+# COLOR
 RED=(255,0,0)
 GREEN=(0,255,0)
 BLUE=(0,0,255)
@@ -17,7 +19,7 @@ GREY=(128,128,128)
 TURQUOISE=(64,224,208)
 
 WIDTH=600
-WIN=pygame.display.set_mode((WIDTH,WIDTH))
+WIN=pygame.display.set_mode((1280,600))
 pygame.display.set_caption("A Graph")
 
 background_color = (234, 212, 252)
@@ -194,4 +196,28 @@ def main(win, width):
 
 	pygame.quit()
 
-main(WIN, WIDTH)
+def Home(WIN):
+
+    while True:
+        hp=HomePage()
+        hp.draw(WIN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            
+            if pygame.mouse.get_pressed()[0]: # LEFT
+                pos = pygame.mouse.get_pos()
+                #check mouseover and clicked conditions
+                if hp.Start.rect.collidepoint(pos):
+                    main(WIN,WIDTH)
+                
+                if hp.Exit.rect.collidepoint(pos):
+                    pygame.quit()
+                #check mouseover and clicked conditions
+                if hp.INS.rect.collidepoint(pos):
+                    pygame.quit()
+      
+        hp.update()
+
+Home(WIN)
