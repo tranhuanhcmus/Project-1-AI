@@ -143,7 +143,7 @@ def get_clicked_pos(pos,rows,width,cols,height):
 
     return row,col
 
-def main(win, width,height):
+def main(findPath,win, width,height):
     ROWS = 40
     COLS= 20
     grid = make_grid(ROWS, width,COLS,height)
@@ -188,8 +188,9 @@ def main(win, width,height):
                         for spot in row:
                             spot.update_neighbors(grid)
 
+                    findPath(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
                     # A_Star(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
-                    GreedyBestFirstSearch(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
+                    # GBFS(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
                     # BFS(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
                     # UCS(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
                     # DFS(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
@@ -200,6 +201,7 @@ def main(win, width,height):
                     grid = make_grid(ROWS, width,COLS,height)
 
     pygame.quit()
+
 
 def Home(WIN):
 
@@ -214,14 +216,20 @@ def Home(WIN):
             if pygame.mouse.get_pressed()[0]: # LEFT
                 pos = pygame.mouse.get_pos()
                 #check mouseover and clicked conditions
-                if hp.Start.rect.collidepoint(pos):
-                    main(WIN,SIZE[0],SIZE[1])
+
+                if hp.A_Star.rect.collidepoint(pos):
+                    main(A_Star,WIN,SIZE[0],SIZE[1])
+                if hp.BFS.rect.collidepoint(pos):
+                    main(BFS,WIN,SIZE[0],SIZE[1])
+                if hp.GBFS.rect.collidepoint(pos):
+                    main(GBFS,WIN,SIZE[0],SIZE[1])
+                if hp.UCS.rect.collidepoint(pos):
+                    main(UCS,WIN,SIZE[0],SIZE[1])
+                if hp.IDS.rect.collidepoint(pos):
+                    main(DFS,WIN,SIZE[0],SIZE[1])
+               
+                    
                 
-                if hp.Exit.rect.collidepoint(pos):
-                    pygame.quit()
-                #check mouseover and clicked conditions
-                if hp.INS.rect.collidepoint(pos):
-                    pygame.quit()
       
         hp.update()
 

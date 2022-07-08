@@ -1,3 +1,4 @@
+from email import iterators
 from queue import PriorityQueue
 import queue
 import pygame
@@ -99,7 +100,7 @@ def UCS(draw, grid, start, end):
 
 	return False
 
-def GreedyBestFirstSearch(draw, grid, start, end):
+def GBFS(draw, grid, start, end):
 	count_open_node = 0
 	frontier = PriorityQueue()
 	frontier.put((0, count_open_node, start))
@@ -176,7 +177,7 @@ def BFS(draw, grid, start, end):
 
 	return False
 
-def DFS(draw, grid, start, end):
+def DFS(draw,start, end,depth):
 	count_open_node = 0
 	frontier = queue.LifoQueue()
 	frontier.put((count_open_node, start))
@@ -202,10 +203,38 @@ def DFS(draw, grid, start, end):
 						came_from[neighbor] = current
 					open_set.add(neighbor)
 					neighbor.make_open()
-
 		
-
-		draw()
+	draw()
 
 
 	return False
+
+
+def IDS(draw, grid, start, end):
+	MAX=100
+	count_open_node = 0
+	
+	came_from = {}
+
+	open_set = {start}
+
+	for depth in range (1,MAX):
+		frontier = queue.LifoQueue()
+		frontier.put((count_open_node, start))
+		count_open_node=0
+		i=0
+		while not frontier.empty() or i<=depth:
+			current=frontier.get()[1]
+			if current not in open_set:
+				open_set.add(current)
+			if i<=depth:
+				for neighbor in current.neighbors:
+					if neighbor not in open_set :
+						count_open_node+1
+						frontier.put((count_open_node, neighbor))
+			i=i+1
+		draw() 
+
+
+	return False
+
