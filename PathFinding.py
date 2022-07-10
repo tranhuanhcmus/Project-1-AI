@@ -115,25 +115,27 @@ def draw_grid(win,rows,width,cols,height):
             pygame.draw.line(win,GREY,(j*w,0),(j*w,height))
 
 
-def draw(win,grid,rows,width,cols,height):
+def draw(win,grid,rows,width,cols,height,list): #// sửa vt 
     win.fill(RED)
     for row in grid:
         for spot in row:
             spot.draw(win)
     
     draw_grid(win,rows,width,cols,height)
+    for index in range(2,len(list)):
+        vt = np.array(list[index])
+        make_obstacle(grid,vt)
+#    vt = np.array([11, 1, 11, 6, 14, 6, 14, 1])
+#    vt2 = np.array([4, 4, 5, 9, 8, 10, 9, 5])
+#    vt3 = np.array([8, 12, 8, 17, 13, 12])
 
-    vt = np.array([11, 1, 11, 6, 14, 6, 14, 1])
-    vt2 = np.array([4, 4, 5, 9, 8, 10, 9, 5])
-    vt3 = np.array([8, 12, 8, 17, 13, 12])
-
-    make_obstacle(grid, vt)
-    make_obstacle(grid, vt2)
-    make_obstacle(grid, vt3)
+#    make_obstacle(grid, vt)
+#    make_obstacle(grid, vt2)
+#    make_obstacle(grid, vt3)
 
     pygame.display.update()
 
-def get_clicked_pos(pos,rows,width,cols,height):
+def get_clicked_pos(pos,rows,width,cols,height):#
     w=width//rows
     h=height//cols
     y,x=pos
@@ -143,16 +145,17 @@ def get_clicked_pos(pos,rows,width,cols,height):
 
     return row,col
 
-def main(findPath,win, width,height):
-    ROWS = 40
-    COLS= 20
+def main(findPath,win, width,height,list):#// SUA ROW COL START END ,ROWS,COLS,start,end
+    ROWS = list[0][0]
+    COLS= list[0][1]
     grid = make_grid(ROWS, width,COLS,height)
-    start = None
-    end = None
-
+    start = grid[list[1][0]][list[1][1]]
+    end = grid[list[1][2]][list[1][3]]
+    start.make_start()
+    end.make_end()
     run = True
     while run:
-        draw(win, grid, ROWS, width,COLS,height)
+        draw(win, grid, ROWS, width,COLS,height,list)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -188,7 +191,7 @@ def main(findPath,win, width,height):
                         for spot in row:
                             spot.update_neighbors(grid)
 
-                    findPath(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
+                    findPath(lambda: draw(win, grid, ROWS, width,COLS,height,list), grid, start, end)
                     # A_Star(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
                     # GBFS(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
                     # BFS(lambda: draw(win, grid, ROWS, width,COLS,height), grid, start, end)
@@ -202,9 +205,31 @@ def main(findPath,win, width,height):
 
     pygame.quit()
 
+def docfile(filename):
+    file_object = open(filename,'r')
+    print(file_object)
 
+    new_data=[]
+
+    for index in range(0,2):
+        data=file_object.readline()
+        data=data[0:-1]
+        data = list(data.split(' '))
+        data = list(map(int,data))
+        new_data.append(data)
+
+    leng=file_object.readline()
+    leng=leng[0:-1]
+    leng=int(leng)
+    for index in range(0,leng):
+        data=file_object.readline()
+        data=data[0:-1]
+        data = list(data.split(' '))
+        data = list(map(int,data))
+        new_data.append(data)
+    return new_data
 def Home(WIN):
-
+    list = docfile('input.txt')
     while True:
         hp=HomePage()
         hp.draw(WIN)
@@ -218,15 +243,15 @@ def Home(WIN):
                 #check mouseover and clicked conditions
 
                 if hp.A_Star.rect.collidepoint(pos):
-                    main(A_Star,WIN,SIZE[0],SIZE[1])
+                    main(A_Star,WIN,SIZE[0],SIZE[1],list)
                 if hp.BFS.rect.collidepoint(pos):
-                    main(BFS,WIN,SIZE[0],SIZE[1])
+                    main(BFS,WIN,SIZE[0],SIZE[1],list)
                 if hp.GBFS.rect.collidepoint(pos):
-                    main(GBFS,WIN,SIZE[0],SIZE[1])
+                    main(GBFS,WIN,SIZE[0],SIZE[1],list)
                 if hp.UCS.rect.collidepoint(pos):
-                    main(UCS,WIN,SIZE[0],SIZE[1])
+                    main(UCS,WIN,SIZE[0],SIZE[1],list)
                 if hp.IDS.rect.collidepoint(pos):
-                    main(DFS,WIN,SIZE[0],SIZE[1])
+                    main(DFS,WIN,SIZE[0],SIZE[1],list)
                
                     
                 
